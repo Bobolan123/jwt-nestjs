@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { IUserAcc } from './type/type';
 
 @Injectable()
 export class UserService {
@@ -33,13 +34,18 @@ export class UserService {
    * we have defined what are the keys we are expecting from body
    * @returns promise of user
    */
-  createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<User | {}> {
+    const isUser = await this.findOneUserByEmail(createUserDto.email);
+    if (isUser) {
+      return {}
+    }
+
     const user: User = new User();
     user.name = createUserDto.name;
     user.email = createUserDto.email;
     user.password = createUserDto.password;
-    user.role = createUserDto.role;    
-    return this.userRepository.save(user);
+    user.role = createUserDto.role;
+    return this.userRepository.save(user) 
   }
 
   /**
@@ -57,6 +63,10 @@ export class UserService {
    */
   findOneUser(id: number): Promise<User> {
     return this.userRepository.findOneBy({ id });
+  }
+
+  findOneUserByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({ where: { email: email } });
   }
 
   /**
@@ -82,5 +92,16 @@ export class UserService {
    */
   removeUser(id: number): Promise<{ affected?: number }> {
     return this.userRepository.delete(id);
+  }
+
+  async checkUserLogin(userAcc:IUserAcc):Promise<User | {}> {
+    const user = await this.findOneUserByEmail(userAcc.email)
+    if (user.password === userAcc.password) {
+      return user
+    } else {
+      return {}
+    }
+    
+
   }
 }
