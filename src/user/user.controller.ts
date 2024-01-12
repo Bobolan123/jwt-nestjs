@@ -8,17 +8,17 @@ import { IUserAcc } from './type/type';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
-  @Get()
+  @Get('read')
   findAll() {
     return this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get('read/:id')
   findOne(@Param('id') id: string) {
     return this.userService.findOneUser(+id);
   }
@@ -30,12 +30,12 @@ export class UserController {
 
 
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(+id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.userService.removeUser(+id);
   }
