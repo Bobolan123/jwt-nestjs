@@ -44,7 +44,7 @@ export class UserService {
     user.name = createUserDto.name;
     user.email = createUserDto.email;
     user.password = createUserDto.password;
-    user.role = createUserDto.role;
+    user.group = createUserDto.group;
     return this.userRepository.save(user) 
   }
 
@@ -63,6 +63,11 @@ export class UserService {
    */
   findOneUser(id: number): Promise<User> {
     return this.userRepository.findOneBy({ id });
+  }
+
+  async findOneByEmail(email: string): Promise<User | undefined> {
+    const allUsers:any = await this.findAll()
+    return allUsers.find(user => user.email === email);
   }
 
   findOneUserByEmail(email: string): Promise<User> {

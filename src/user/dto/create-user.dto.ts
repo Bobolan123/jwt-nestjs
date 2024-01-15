@@ -22,7 +22,7 @@ import {
   
     @IsString()
     @IsEnum(['user', 'admin', 'dev'])
-    role:string;
+    group:string;
     // @IsString()
     // @IsEnum(['f', 'm', 'u'])
     // gender: string;

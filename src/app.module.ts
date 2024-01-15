@@ -8,9 +8,15 @@ import { RoleModule } from './role/role.module';
 import { Role } from './role/entities/role.entity';
 import { GroupModule } from './group/group.module';
 import { Group } from './group/entities/group.entity';
+import { PassportModule } from '@nestjs/passport';
+import { LocalStrategy } from './auth/local.strategy';
+import { AuthModule } from './auth/auth.module';
+import { AuthService } from './auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    PassportModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -25,8 +31,9 @@ import { Group } from './group/entities/group.entity';
     UserModule,
     RoleModule,
     GroupModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService,LocalStrategy, JwtService],
 })
-export class AppModule {}
+export class AppModule {} 

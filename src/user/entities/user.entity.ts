@@ -20,7 +20,7 @@ export class User {
 
   @Column({ type: 'enum', enum: ['user', 'admin', 'dev'], unique: true,
   nullable: true, })
-  role: string;
+  group: string;
 
   //   @Column({ type: 'enum', enum: ['m', 'f', 'u'] })
   //   /**
