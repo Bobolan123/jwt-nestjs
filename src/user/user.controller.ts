@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserAcc } from './type/type';
+import { skipAuth } from 'src/auth/skipAuth';
 
 @Controller('api/user')
 export class UserController {
@@ -13,6 +14,7 @@ export class UserController {
     return this.userService.createUser(createUserDto);
   }
 
+  @skipAuth()
   @Get('read')
   findAll() {
     return this.userService.findAll();

@@ -3,6 +3,7 @@ import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { skipAuth } from 'src/auth/skipAuth';
 
 @Controller('api/role')
 export class RoleController {
@@ -13,12 +14,12 @@ export class RoleController {
     return this.roleService.create(createRoleDto);
   }
 
+  @skipAuth()
   @Get('read')
   findAll() {
     return this.roleService.findAll();
   }
 
-  @UseGuards(RolesGuard) 
   @Get('read/:id')
   findOne(@Param('id') id: string) {
     return this.roleService.findOne(+id);

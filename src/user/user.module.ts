@@ -10,6 +10,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
   providers: [UserService,
+    //unauthorized user
     // {
     //   provide: APP_GUARD,
     //   useClass: JwtAuthGuard,
