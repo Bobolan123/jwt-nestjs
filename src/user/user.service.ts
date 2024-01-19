@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { IUserAcc } from './type/type';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -37,15 +38,17 @@ export class UserService {
   async createUser(createUserDto: CreateUserDto): Promise<User | {}> {
     const isUser = await this.findOneUserByEmail(createUserDto.email);
     if (isUser) {
-      return {}
+      return {};
     }
 
     const user: User = new User();
     user.name = createUserDto.name;
     user.email = createUserDto.email;
-    user.password = createUserDto.password;
+    const saltOrRounds = 10;
+    const hash = await bcrypt.hash(createUserDto.password, saltOrRounds);
+    user.password = hash;
     user.group = createUserDto.group;
-    return this.userRepository.save(user) 
+    return this.userRepository.save(user);
   }
 
   /**
@@ -66,8 +69,8 @@ export class UserService {
   }
 
   async findOneByEmail(email: string): Promise<User | undefined> {
-    const allUsers:any = await this.findAll()
-    return allUsers.find(user => user.email === email);
+    const allUsers: any = await this.findAll();
+    return allUsers.find((user) => user.email === email);
   }
 
   findOneUserByEmail(email: string): Promise<User> {
@@ -86,6 +89,7 @@ export class UserService {
     user.name = updateUserDto.name;
     user.email = updateUserDto.email;
     user.password = updateUserDto.password;
+    user.group = updateUserDto.group;
     user.id = id;
     return this.userRepository.save(user);
   }
@@ -99,14 +103,12 @@ export class UserService {
     return this.userRepository.delete(id);
   }
 
-  async checkUserLogin(userAcc:IUserAcc):Promise<User | {}> {
-    const user = await this.findOneUserByEmail(userAcc.email)
+  async checkUserLogin(userAcc: IUserAcc): Promise<User | {}> {
+    const user = await this.findOneUserByEmail(userAcc.email);
     if (user.password === userAcc.password) {
-      return user
+      return user;
     } else {
-      return {}
+      return {};
     }
-    
-
   }
 }

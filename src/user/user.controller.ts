@@ -1,21 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserAcc } from './type/type';
 import { skipAuth } from 'src/auth/skipAuth';
+import { ReadUsers } from 'src/interceptors/users.interceptor';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { Role } from 'src/auth/roles/role.enum';
 
 @Controller('api/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @skipAuth()
   @Post('create')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
-  @skipAuth()
+  // @skipAuth()
+  // @UseInterceptors(ReadUsers)
   @Get('read')
+  // @Roles(Role.admin)
   findAll() {
     return this.userService.findAll();
   }

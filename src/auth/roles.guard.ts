@@ -1,23 +1,19 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { Role } from './roles/role.enum';
+import { ROLES_KEY } from './roles/roles.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
-    
-    // Add the authorization logic here with Permit.io.
-    // If the user has the necessary permissions, it will return true.
-    // If the user does not have the necessary permissions, 
-    // throw an UnauthorizedException.
+  constructor(private reflector: Reflector) {}
 
-    const userHasPermission = true; // <- replace this line with your Permit.io logic
-
-    if (!userHasPermission) {
-      throw new UnauthorizedException('You do not have the necessary permissions.');
-    }
-    return true;
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    const { user } = context.switchToHttp().getRequest();
+    console.log(user)
+    return true
   }
 }

@@ -15,7 +15,7 @@ export class User {
   @Column({ type: 'varchar', length: 40 })
   email: string;
 
-  @Column({ type: 'varchar', select:false })
+  @Column({ type: 'varchar'})
   password: string;
 
   @Column({ type: 'enum', enum: ['user', 'admin', 'dev'], unique: true,
@@ -29,6 +29,7 @@ export class User {
   //    * u - unspecified
   //    */
   //   gender: string;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

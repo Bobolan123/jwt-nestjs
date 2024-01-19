@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -15,6 +16,10 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
     //   provide: APP_GUARD,
     //   useClass: JwtAuthGuard,
     // },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
   exports: [UserService],
 })
