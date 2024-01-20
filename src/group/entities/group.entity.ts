@@ -1,40 +1,43 @@
-import { Role } from 'src/role/entities/role.entity';
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
+  import { Role } from 'src/role/entities/role.entity';
+  import { User } from 'src/user/entities/user.entity';
+  import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+  import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity()
-export class Group {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @Entity()
+  export class Group {
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ type: 'varchar', length: 30 })
-  name: 'dev' | 'user' | 'admin' 
+    @Column({ type: 'varchar', length: 30 })
+    name: 'dev' | 'user' | 'admin' 
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public created_at: Date;
+    @OneToMany(() => User, (user) => user.group)
+    users: User[]
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  public updated_at: Date;
+    @CreateDateColumn({
+      type: 'timestamp',
+      default: () => 'CURRENT_TIMESTAMP(6)',
+    })
+    public created_at: Date;
 
-  @ManyToMany(() => Role, role => role.groups)
-  @JoinTable({
-    name:"group_role",
-    joinColumn: {
-      name: "groupId",
-      referencedColumnName: "id"
-  },
-  inverseJoinColumn: {
-      name: "roleId",
-      referencedColumnName: "id"
+    @UpdateDateColumn({
+      type: 'timestamp',
+      default: () => 'CURRENT_TIMESTAMP(6)',
+      onUpdate: 'CURRENT_TIMESTAMP(6)',
+    })
+    public updated_at: Date;
+
+    @ManyToMany(() => Role, role => role.groups)
+    @JoinTable({
+      name:"group_role",
+      joinColumn: {
+        name: "groupId",
+        referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+        name: "roleId",
+        referencedColumnName: "id"
+    }
+    })  
+    roles:Role[]
   }
-  })  
-  roles:Role[]
-
-}

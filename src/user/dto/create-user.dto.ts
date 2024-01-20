@@ -6,6 +6,7 @@ import {
     Matches,
     MinLength,
   } from 'class-validator';
+import { Group } from 'src/group/entities/group.entity';
   
   const passwordRegEx =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{3,20}$/;
@@ -20,9 +21,11 @@ import {
     @IsEmail(null, { message: 'Please provide valid Email.' })
     email: string;
   
-    @IsString()
-    @IsEnum(['user', 'admin', 'dev'])
-    group:string;
+
+    group: Group
+    // @IsString()
+    // @IsEnum(['user', 'admin', 'dev'])
+    // group:string;
     // @IsString()
     // @IsEnum(['f', 'm', 'u'])
     // gender: string;

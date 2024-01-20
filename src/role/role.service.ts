@@ -20,9 +20,7 @@ export class RoleService {
         groups: true,
       },
     });
-    if (isRole) {
-      return {};
-    }
+  
     const role: Role = new Role();
     role.url = createRoleDto.url;
     role.description = createRoleDto.description;

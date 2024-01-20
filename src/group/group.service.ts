@@ -49,10 +49,12 @@ export class GroupService {
   findAll() {
     return this.groupRepository.find({
       relations:{
-        roles:true
+        roles:true,
+        users:true
       }
     })
   }
+  
   findOne(id:number) {
     return this.groupRepository.findOne({
       where:{id:id},

@@ -47,8 +47,8 @@ export class UserService {
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(createUserDto.password, saltOrRounds);
     user.password = hash;
-    user.group = createUserDto.group;
-    return this.userRepository.save(user);
+    user.group = createUserDto.group
+    return this.userRepository.manager.save(user);
   }
 
   /**
@@ -56,8 +56,17 @@ export class UserService {
    * @returns promise of array of users
    */
   findAll(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      join: {
+        alias: 'user',
+        leftJoinAndSelect: {
+          group: 'user.group',
+          roles: 'group.roles',
+        },
+      },
+    });
   }
+  
 
   /**
    * this function used to get data of use whose id is passed in parameter
@@ -65,7 +74,9 @@ export class UserService {
    * @returns promise of user
    */
   findOneUser(id: number): Promise<User> {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOneBy({ 
+      id
+    });
   }
 
   async findOneByEmail(email: string): Promise<User | undefined> {
@@ -89,7 +100,6 @@ export class UserService {
     user.name = updateUserDto.name;
     user.email = updateUserDto.email;
     user.password = updateUserDto.password;
-    user.group = updateUserDto.group;
     user.id = id;
     return this.userRepository.save(user);
   }

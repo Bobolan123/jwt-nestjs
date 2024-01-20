@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Group } from 'src/group/entities/group.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
@@ -18,9 +19,12 @@ export class User {
   @Column({ type: 'varchar'})
   password: string;
 
-  @Column({ type: 'enum', enum: ['user', 'admin', 'dev'], unique: true,
-  nullable: true, })
-  group: string;
+  // @Column({ type: 'enum', enum: ['user', 'admin', 'dev'], unique: true,
+  // nullable: true, })
+  // group: string;
+
+  @ManyToOne(() => Group, (group) => group.users)
+  group: Group
 
   //   @Column({ type: 'enum', enum: ['m', 'f', 'u'] })
   //   /**
