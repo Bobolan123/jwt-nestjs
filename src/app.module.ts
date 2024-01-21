@@ -15,6 +15,7 @@ import { AuthService } from './auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
       port: 5432,
       password: 'andhungbui00',
       username: 'postgres',
-      entities: [User, Role, Group, ],
+      entities: [User, Role, Group],
       database: 'postgres',
       synchronize: true,
       logging: true,
@@ -36,11 +37,20 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService,LocalStrategy, JwtService, 
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
+  providers: [
+    AppService,
+    AuthService,
+    LocalStrategy,
+    JwtService,
+    // check bear token to know the user signed or not
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
 })
-export class AppModule {} 
+export class AppModule {}

@@ -74,10 +74,35 @@ export class UserService {
    * @returns promise of user
    */
   findOneUser(id: number): Promise<User> {
-    return this.userRepository.findOneBy({ 
-      id
+    return this.userRepository.findOne({
+      where: {
+        id: id
+      },
+      join: {
+        alias: 'user',
+        leftJoinAndSelect: {
+          group: 'user.group',
+          roles: 'group.roles',
+        },
+      },
     });
   }
+
+  findOneUserEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        email: email
+      },
+      join: {
+        alias: 'user',
+        leftJoinAndSelect: {
+          group: 'user.group',
+          roles: 'group.roles',
+        },
+      },
+    });
+  }
+  
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     const allUsers: any = await this.findAll();

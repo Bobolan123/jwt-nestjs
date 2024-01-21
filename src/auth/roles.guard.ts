@@ -1,19 +1,21 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from './roles/role.enum';
-import { ROLES_KEY } from './roles/roles.decorator';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(private reflector: Reflector, private userService: UserService) {}
 
-  canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    const { user } = context.switchToHttp().getRequest();
-    console.log(user)
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+
+    const user = request.user; // get from JWtAuthgurd that is applied global in app module
+    const endpoint:string = request.originalUrl;
+
+    const userData = await this.userService.findOneUserEmail(user.email);
+    const roles = userData.group.roles
+
+    const checkRole= roles.some(role => endpoint.includes(role.url))
     return true
   }
 }

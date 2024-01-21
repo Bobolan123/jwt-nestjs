@@ -8,7 +8,7 @@ import { skipAuth } from './auth/skipAuth';
 export class AppController {
   constructor(private authService: AuthService) {}
 
-  @skipAuth()
+  // @skipAuth()
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {

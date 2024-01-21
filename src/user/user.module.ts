@@ -11,15 +11,15 @@ import { RolesGuard } from 'src/auth/roles.guard';
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
   providers: [UserService,
-    //unauthorized user
+    // // unauthorized user
     // {
     //   provide: APP_GUARD,
     //   useClass: JwtAuthGuard,
     // },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard,
+    // },
   ],
   exports: [UserService],
 })
