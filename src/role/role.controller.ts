@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { RolesGuard } from 'src/auth/roles.guard';
 import { skipAuth } from 'src/auth/skipAuth';
 
 @Controller('api/role')
@@ -14,7 +13,6 @@ export class RoleController {
     return this.roleService.create(createRoleDto);
   }
 
-  @skipAuth()
   @Get('read')
   findAll() {
     return this.roleService.findAll();
@@ -34,4 +32,4 @@ export class RoleController {
   remove(@Param('id') id: string) {
     return this.roleService.remove(+id);
   }
-}
+} 

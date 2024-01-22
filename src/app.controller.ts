@@ -7,13 +7,13 @@ import { skipAuth } from './auth/skipAuth';
 @Controller()
 export class AppController {
   constructor(private authService: AuthService) {}
-
+  
   // @skipAuth()
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
     return this.authService.login(req.user);
-  }
+  } 
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
